@@ -30,17 +30,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun applyObservers() {
         vm.state.observe(this) {
-            if (it.isInProgress) {
-                binding.progressBarLoading.visibility = View.VISIBLE
-                binding.buttonCalculate.isEnabled = false
-            } else {
-                binding.progressBarLoading.visibility = View.GONE
-                binding.buttonCalculate.isEnabled = true
+            binding.progressBarLoading.visibility = View.GONE
+            binding.buttonCalculate.isEnabled = true
+
+            when (it) {
+                is Error -> {
+                    Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
+                }
+                is Progress -> {
+                    binding.progressBarLoading.visibility = View.VISIBLE
+                    binding.buttonCalculate.isEnabled = false
+                }
+                is Result -> {
+                    binding.textViewFactorial.text = it.factorial
+                }
             }
-            if (it.isError) {
-                Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
-            }
-            binding.textViewFactorial.text = it.factorial
         }
     }
 }
