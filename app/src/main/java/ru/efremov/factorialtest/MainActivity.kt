@@ -29,24 +29,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun applyObservers() {
-        vm.progress.observe(this) {
-            if (it) {
+        vm.state.observe(this) {
+            if (it.isInProgress) {
                 binding.progressBarLoading.visibility = View.VISIBLE
                 binding.buttonCalculate.isEnabled = false
             } else {
                 binding.progressBarLoading.visibility = View.GONE
                 binding.buttonCalculate.isEnabled = true
             }
-        }
-
-        vm.error.observe(this) {
-            if (it) {
+            if (it.isError) {
                 Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        vm.factorial.observe(this) {
-            binding.textViewFactorial.text = it
+            binding.textViewFactorial.text = it.factorial
         }
     }
 }
